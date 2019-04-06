@@ -1,59 +1,88 @@
-FROM php:7.2-apache-stretch
+FROM ubuntu:18.04
+LABEL maintainer Khoi Le <mr.vjcspy@gmail.com>
 
-RUN apt-get -y update --fix-missing
-RUN apt-get upgrade -y
+# Environments vars
+ENV TERM=xterm
 
-# Install useful tools
-RUN apt-get -y install apt-utils nano wget dialog
+RUN apt-get update
+RUN apt-get -y upgrade
 
-# Install important libraries
-RUN apt-get -y install --fix-missing apt-utils build-essential git curl libcurl3 libcurl3-dev zip openssl
+# Packages installation
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y --fix-missing install apache2 \
+      php7.2 \
+      php7.2-cli \
+      php7.2-bcmath \
+      php7.2-bz2 \
+      php7.2-common \
+      php7.2-intl \
+      php7.2-gd \
+      php7.2-json \
+      php7.2-mbstring \
+      php7.2-xml \
+      php7.2-mysql \
+      php7.2-xsl \
+      php7.2-zip \
+      php7.2-soap \
+      libapache2-mod-php \
+      curl \
+      php7.2-curl \
+      apt-transport-https \
+      nano \
+      php7.2-xdebug
 
-# Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN a2enmod rewrite
 
-# Install xdebug
-RUN pecl install xdebug-2.6.0
-RUN docker-php-ext-enable xdebug
+RUN apt-get -y install gcc make autoconf libc-dev pkg-config
+RUN apt-get -y install libmcrypt-dev
+RUN apt-get -y install libmcrypt-dev
+RUN apt-get -y install php-pear php7.2-dev libyaml-dev
+RUN pecl channel-update pecl.php.net
+RUN pecl install mcrypt-1.0.1
 
-# Install redis
-RUN pecl install redis-4.0.1
-RUN docker-php-ext-enable redis
+# Composer install
+RUN curl -sS https://getcomposer.org/installer | php
+RUN mv composer.phar /usr/local/bin/composer
 
-# Other PHP7 Extensions
+# openssh-server
+# RUN apt-get update && apt-get install -y openssh-server
+# RUN mkdir /var/run/sshd
+# RUN echo 'root:1' | chpasswd
+# RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+# SSH login fix. Otherwise user is kicked off after login
+# RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+# ENV NOTVISIBLE "in users profile"
+# RUN echo "export VISIBLE=now" >> /etc/profile
+# RUN /usr/sbin/sshd -D
 
-RUN apt-get -y install libsqlite3-dev libsqlite3-0 mysql-client
-RUN docker-php-ext-install pdo_mysql
-RUN docker-php-ext-install pdo_sqlite
-RUN docker-php-ext-install mysqli
+# Install cron
+RUN apt-get -y install cron
 
-RUN docker-php-ext-install curl
-RUN docker-php-ext-install tokenizer
-RUN docker-php-ext-install json
+# Add crontab file in the cron directory
+# ADD crontab /etc/cron.d/hello-cron
 
-RUN apt-get -y install zlib1g-dev
-RUN docker-php-ext-install zip
+# Give execution rights on the cron job
+# RUN chmod 0644 /etc/cron.d/hello-cron
 
-RUN apt-get -y install libicu-dev
-RUN docker-php-ext-install -j$(nproc) intl
+# Apply cron job
+# RUN crontab /etc/cron.d/hello-cron
 
-RUN docker-php-ext-install mbstring
-RUN docker-php-ext-install gettext
+# Init
+ADD ./utils/init.sh /init.sh
+ADD ./utils/up.sh /var/www/up.sh
+RUN chmod 755 /*.sh
+RUN chmod 755 /var/www/*.sh
 
-RUN docker-php-ext-install bcmath
+# Add phpinfo script for INFO purposes
+RUN echo "<?php phpinfo();" >> /var/www/index.php
 
-RUN apt-get install -y libxslt-dev
-RUN docker-php-ext-install xsl
+RUN chown -R www-data:www-data /var/www
 
-RUN docker-php-ext-install soap
+WORKDIR /var/www/
 
-RUN apt-get update && apt-get install -y \
-        libfreetype6-dev \
-        libjpeg62-turbo-dev \
-        libpng-dev \
-    && docker-php-ext-install -j$(nproc) iconv \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install -j$(nproc) gd
+# Volume
+VOLUME /var/www
 
-# Enable apache modules
-RUN a2enmod rewrite headers
+# Ports: apache2, xdebug
+EXPOSE 80 9000 22
+
+CMD ["/init.sh", ";", "up.sh", ";", "cron", "-f"]

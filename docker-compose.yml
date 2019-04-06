@@ -2,8 +2,7 @@ version: "3.5"
 
 services:
   webserver:
-    build:
-      context: ./bin/webserver
+    image: vjcspy/docker_apache2:latest
     container_name: "${STACK_NAME}-web"
     domainname: "${STACK_NAME}-web"
     hostname: "${STACK_NAME}-web"
@@ -17,9 +16,12 @@ services:
       - lamp-network
     volumes:
       - ./www:/var/www:delegated
-      - ${PHP_INI-./config/php/php.ini}:/usr/local/etc/php/php.ini:delegated
-      - ${VHOSTS_DIR-./config/vhosts}:/etc/apache2/sites-enabled:delegated
+      - ${PHP_INI-./config/php/php.ini}:/etc/php/7.2/apache2/php.ini:delegated
+      - ${VHOSTS_DIR-./config/vhosts}:/etc/apache2/sites-available:delegated
       - ${LOG_DIR-./logs/apache2}:/etc/apache2/logs/apache2:delegated
+      - ./config/apache/apache2.conf:/etc/apache2/apache2.conf:delegated
+      - ./config/apache/ports.conf:/etc/apache2/ports.conf:delegated
+      - ./config/apache/envvars:/etc/apache2/envvars:delegated
     env_file: .env
   mysql:
     build: ./bin/mysql
@@ -62,7 +64,9 @@ services:
     domainname: "${STACK_NAME}-rds"
     hostname: "${STACK_NAME}-rds"
     image: redis:latest
-    command: redis-server --appendonly yes --requirepass root
+    command:
+      - redis-server --appendonly yes
+#      - redis-server --appendonly yes --requirepass root
     ports:
       - "${HOST_MACHINE_REDIS_PORT}:6379"
     networks:
