@@ -1,49 +1,73 @@
-version: "3"
+version: "3.5"
 
 services:
   webserver:
-    build: 
+    build:
       context: ./bin/webserver
-    container_name: 'png-webserver'
-    restart: 'always'
+    container_name: "${STACK_NAME}-web"
+    domainname: "${STACK_NAME}-web"
+    hostname: "${STACK_NAME}-web"
+    #    restart: 'always'
+    expose:
+      - 90000
     ports:
-      - "80:80"
-      - "443:443"
-    links: 
-      - mysql
-    volumes: 
-      - ${DOCUMENT_ROOT-./www}:/var/www/html
-      - ${PHP_INI-./config/php/php.ini}:/usr/local/etc/php/php.ini
-      - ${VHOSTS_DIR-./config/vhosts}:/etc/apache2/sites-enabled
-      - ${LOG_DIR-./logs/apache2}:/var/log/apache2
+      - "${HOST_MACHINE_UNSECURE_HOST_PORT}:80"
+      - "${HOST_MACHINE_SECURE_HOST_PORT}:443"
+    networks:
+      - lamp-network
+    volumes:
+      - ./www:/var/www:delegated
+      - ${PHP_INI-./config/php/php.ini}:/usr/local/etc/php/php.ini:delegated
+      - ${VHOSTS_DIR-./config/vhosts}:/etc/apache2/sites-enabled:delegated
+      - ${LOG_DIR-./logs/apache2}:/etc/apache2/logs/apache2:delegated
+    env_file: .env
   mysql:
     build: ./bin/mysql
-    container_name: 'png-mysql'
-    restart: 'always'
+    container_name: "${STACK_NAME}-db"
+    domainname: "${STACK_NAME}-db"
+    hostname: "${STACK_NAME}-db"
+    #    restart: 'always'
     ports:
-      - "3306:3306"
-    volumes: 
-      - ${MYSQL_DATA_DIR-./data/mysql}:/var/lib/mysql
-      - ${MYSQL_LOG_DIR-./logs/mysql}:/var/log/mysql
+      - "${HOST_MACHINE_MYSQL_PORT}:3306"
+    networks:
+      - lamp-network
+    volumes:
+      - ${MYSQL_DATA_DIR-./data/mysql}:/var/lib/mysql:delegated
+      - ${MYSQL_LOG_DIR-./logs/mysql}:/var/log/mysql:delegated
     environment:
-      MYSQL_ROOT_PASSWORD: tiger
-      MYSQL_DATABASE: png
-      MYSQL_USER: png
-      MYSQL_PASSWORD: png
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: 'png-phpmyadmin'
-    links:
-      - mysql
-    environment:
-      PMA_HOST: mysql
-      PMA_PORT: 3306
-    ports:
-      - '8080:80'
-    volumes: 
-      - /sessions
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    env_file: .env
+  #  phpmyadmin:
+  #    image: phpmyadmin/phpmyadmin
+  #    container_name: 'sc-phpmyadmin'
+  #    links:
+  #      - mysql
+  #    environment:
+  #      PMA_HOST: mysql
+  #      PMA_PORT: 3306
+  #      PMA_USER: ${MYSQL_USER}
+  #      PMA_PASSWORD: ${MYSQL_PASSWORD}
+  #      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  #      MYSQL_USER: ${MYSQL_USER}
+  #      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+  #    ports:
+  #      - '8080:80'
+  #    volumes:
+  #      - /sessions
   redis:
-    container_name: 'png-redis'
+    container_name: "${STACK_NAME}-rds"
+    domainname: "${STACK_NAME}-rds"
+    hostname: "${STACK_NAME}-rds"
     image: redis:latest
+    command: redis-server --appendonly yes --requirepass root
     ports:
-      - "6379:6379"
+      - "${HOST_MACHINE_REDIS_PORT}:6379"
+    networks:
+      - lamp-network
+    env_file: .env
+networks:
+  lamp-network:
+
