@@ -1,6 +1,5 @@
 /.vscode
 /.idea
-/config/*
 /data/*
 /logs/*
 /www/**
