@@ -70,7 +70,6 @@ RUN apt-get -y install cron
 ADD ./utils/init.sh /init.sh
 ADD ./utils/up.sh /up.sh
 RUN chmod 755 /*.sh
-RUN chmod 755 /var/www/*.sh
 
 # Add phpinfo script for INFO purposes
 RUN echo "<?php phpinfo();" >> /var/www/index.php
