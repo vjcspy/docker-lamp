@@ -68,7 +68,7 @@ RUN apt-get -y install cron
 
 # Init
 ADD ./utils/init.sh /init.sh
-ADD ./utils/up.sh /var/www/up.sh
+ADD ./utils/up.sh /up.sh
 RUN chmod 755 /*.sh
 RUN chmod 755 /var/www/*.sh
 
@@ -85,4 +85,4 @@ VOLUME /var/www
 # Ports: apache2, xdebug
 EXPOSE 80 9000 22
 
-CMD ["/init.sh", ";", "up.sh", ";", "cron", "-f"]
+CMD ["/init.sh", ";", "/up.sh", ";", "cron", "-f"]
