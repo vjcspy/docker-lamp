@@ -64,9 +64,8 @@ services:
     domainname: "${STACK_NAME}-rds"
     hostname: "${STACK_NAME}-rds"
     image: redis:latest
-    command:
-      - redis-server --appendonly yes
-#      - redis-server --appendonly yes --requirepass root
+    # command: redis-server --appendonly yes --requirepass root
+    command: ["redis-server", "--appendonly", "yes"]
     ports:
       - "${HOST_MACHINE_REDIS_PORT}:6379"
     networks:

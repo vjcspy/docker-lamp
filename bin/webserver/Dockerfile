@@ -84,4 +84,4 @@ VOLUME /var/www
 # Ports: apache2, xdebug
 EXPOSE 80 9000 22
 
-CMD ["/init.sh", ";", "/up.sh", ";", "cron", "-f"]
+CMD "/init.sh;/up.sh;cron -f"
