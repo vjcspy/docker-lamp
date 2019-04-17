@@ -1,10 +1,9 @@
 #!/bin/bash
-
-apachectl -D FOREGROUND
+echo "start server"
 
 # enable all site
 for filename in /etc/apache2/sites-available/*.conf; do
-    if [[ $(basename ${filename}) != "000-default.conf" ]] && [[ $(basename ${filename}) != "default-ssl.conf" ]]
+    if [[ $(basename ${filename}) != "000-default.conf" ]] && [[ $(basename ${filename}) != "default-ssl.conf" ]] && [[ $(basename ${filename}) != "default.conf" ]]
      then
         a2ensite $(basename ${filename})
     fi
@@ -15,6 +14,7 @@ export XDEBUG_CONFIG="remote_enable=1 remote_mode=req remote_port=9000 remote_ho
 #export PHP_IDE_CONFIG="serverName=mage2"
 
 phpdismod xdebug
-service apache2 reload
 
-cron -f
+echo "start apache"
+exec apachectl -D FOREGROUND
+
