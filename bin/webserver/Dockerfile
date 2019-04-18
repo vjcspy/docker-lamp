@@ -5,39 +5,42 @@ LABEL maintainer Khoi Le <mr.vjcspy@gmail.com>
 ENV TERM=xterm
 
 RUN apt-get update
-RUN apt-get -y upgrade
+# RUN apt-get -y upgrade
+
+#php7.1 may not be availabel in Ubuntu default package. Add to get from 3rd repo
+RUN apt-get install -y software-properties-common --fix-missing
+RUN add-apt-repository ppa:ondrej/php
 
 # Packages installation
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y --fix-missing install apache2 \
-      php7.2 \
-      php7.2-cli \
-      php7.2-bcmath \
-      php7.2-bz2 \
-      php7.2-common \
-      php7.2-intl \
-      php7.2-gd \
-      php7.2-json \
-      php7.2-mbstring \
-      php7.2-xml \
-      php7.2-mysql \
-      php7.2-xsl \
-      php7.2-zip \
-      php7.2-soap \
-      libapache2-mod-php \
+      php7.1 \
+      php7.1-cli \
+      php7.1-bcmath \
+      php7.1-bz2 \
+      php7.1-common \
+      php7.1-intl \
+      php7.1-gd \
+      php7.1-json \
+      php7.1-mbstring \
+      php7.1-xml \
+      php7.1-mysql \
+      php7.1-xsl \
+      php7.1-gd \
+      php7.1-mcrypt \
+      php7.1-zip \
+      php7.1-soap \
+      libapache2-mod-php7.1 \
       curl \
-      php7.2-curl \
+      php7.1-curl \
       apt-transport-https \
       nano \
-      php7.2-xdebug
+      php7.1-xdebug
 
 RUN a2enmod rewrite
 
-RUN apt-get -y install gcc make autoconf libc-dev pkg-config
-RUN apt-get -y install libmcrypt-dev
-RUN apt-get -y install libmcrypt-dev
-RUN apt-get -y install php-pear php7.2-dev libyaml-dev
+# PEAR
+RUN apt-get -y install php-pear
 RUN pecl channel-update pecl.php.net
-RUN pecl install mcrypt-1.0.1
 
 # Composer install
 RUN curl -sS https://getcomposer.org/installer | php
