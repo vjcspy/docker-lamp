@@ -2,7 +2,7 @@ version: "3.5"
 
 services:
   webserver:
-    image: vjcspy/docker_apache2:7.1.x
+    image: vjcspy/docker_apache2:7.0.x
     container_name: "${STACK_NAME}-web"
     domainname: "${STACK_NAME}-web"
     hostname: "${STACK_NAME}-web"
@@ -16,7 +16,7 @@ services:
       - lamp-network
     volumes:
       - ./www:/var/www:delegated
-      - ${PHP_INI-./config/php/php.ini}:/etc/php/7.1/apache2/php.ini:delegated
+      - ${PHP_INI-./config/php/php.ini}:/etc/php/7.0/apache2/php.ini:delegated
       - ${VHOSTS_DIR-./config/vhosts}:/etc/apache2/sites-available:delegated
       - ${LOG_DIR-./logs/apache2}:/etc/apache2/logs/apache2:delegated
       - ./config/apache/apache2.conf:/etc/apache2/apache2.conf:delegated

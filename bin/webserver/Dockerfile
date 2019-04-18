@@ -13,28 +13,28 @@ RUN add-apt-repository ppa:ondrej/php
 
 # Packages installation
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y --fix-missing install apache2 \
-      php7.1 \
-      php7.1-cli \
-      php7.1-bcmath \
-      php7.1-bz2 \
-      php7.1-common \
-      php7.1-intl \
-      php7.1-gd \
-      php7.1-json \
-      php7.1-mbstring \
-      php7.1-xml \
-      php7.1-mysql \
-      php7.1-xsl \
-      php7.1-gd \
-      php7.1-mcrypt \
-      php7.1-zip \
-      php7.1-soap \
-      libapache2-mod-php7.1 \
+      php7.0 \
+      php7.0-cli \
+      php7.0-bcmath \
+      php7.0-bz2 \
+      php7.0-common \
+      php7.0-intl \
+      php7.0-gd \
+      php7.0-json \
+      php7.0-mbstring \
+      php7.0-xml \
+      php7.0-mysql \
+      php7.0-xsl \
+      php7.0-gd \
+      php7.0-mcrypt \
+      php7.0-zip \
+      php7.0-soap \
+      libapache2-mod-php7.0 \
       curl \
-      php7.1-curl \
+      php7.0-curl \
       apt-transport-https \
       nano \
-      php7.1-xdebug
+      php7.0-xdebug
 
 RUN a2enmod rewrite
 
@@ -58,7 +58,7 @@ RUN mv composer.phar /usr/local/bin/composer
 # RUN /usr/sbin/sshd -D
 
 # Install cron
-RUN apt-get -y install cron
+#RUN apt-get -y install cron
 
 # Add crontab file in the cron directory
 # ADD crontab /etc/cron.d/hello-cron
