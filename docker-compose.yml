@@ -59,6 +59,20 @@ services:
   #      - '8080:80'
   #    volumes:
   #      - /sessions
+  rabbit:
+    networks:
+      - lamp-network
+    hostname: "${STACK_NAME}-rb"
+    domainname: "${STACK_NAME}-rb"
+    image: "rabbitmq:3-management"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+      RABBITMQ_DEFAULT_VHOST: "/"
   redis:
     container_name: "${STACK_NAME}-rds"
     domainname: "${STACK_NAME}-rds"
