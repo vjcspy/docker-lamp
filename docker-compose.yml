@@ -63,6 +63,7 @@ services:
     networks:
       - lamp-network
     hostname: "${STACK_NAME}-rb"
+    container_name: "${STACK_NAME}-rb"
     domainname: "${STACK_NAME}-rb"
     image: "rabbitmq:3-management"
     ports:
