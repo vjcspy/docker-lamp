@@ -92,9 +92,10 @@ It runs on default port `5672`.
 ## Xdebug (Ubuntu version)
 
 Just enable xdebug by, it should be work with no configuration on code editor.
+
 `phpenmode xdebug;service apache2 restart`
 
-#####If you are using phpStorm and want to using php CLI debug. Follow this steps:
+##### If you are using phpStorm and want to using php CLI debug. Follow this steps:
 1. Config environment variable for CLI
 
 `export XDEBUG_CONFIG="remote_enable=1 remote_mode=req remote_port=9000 remote_host=host.docker.internal remote_connect_back=0"`
