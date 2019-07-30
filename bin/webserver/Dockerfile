@@ -57,6 +57,8 @@ RUN mv composer.phar /usr/local/bin/composer
 # Install cron
 RUN apt-get -y install cron
 
+RUN apt-get -y install htop
+
 # Add crontab file in the cron directory
 # ADD crontab /etc/cron.d/hello-cron
 

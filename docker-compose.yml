@@ -16,6 +16,7 @@ services:
       - lamp-network
     volumes:
       - ./www:/var/www:delegated
+      - /Users/vjcspy/work/E/source/clikboutik-andrew:/var/outside/clikboutik-andrew:delegated
       - ${PHP_INI-./config/php/php.ini}:/etc/php/7.2/apache2/php.ini:delegated
       - ${VHOSTS_DIR-./config/vhosts}:/etc/apache2/sites-available:delegated
       - ${LOG_DIR-./logs/apache2}:/etc/apache2/logs/apache2:delegated
