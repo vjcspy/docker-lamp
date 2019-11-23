@@ -104,3 +104,5 @@ Just enable xdebug by, it should be work with no configuration on code editor.
 
 `export PHP_IDE_CONFIG="serverName=SERVER_NAME"`
 
+Command to show host ip: 
+`route | awk '/^default/ { print $2 }'`
