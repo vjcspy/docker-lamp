@@ -16,7 +16,6 @@ services:
       - lamp-network
     volumes:
       - ./www:/var/www:delegated
-      - /Users/vjcspy/work/E/source/clikboutik-andrew:/var/outside/clikboutik-andrew:delegated
       - ${PHP_INI-./config/php/php.ini}:/etc/php/7.2/apache2/php.ini:delegated
       - ${VHOSTS_DIR-./config/vhosts}:/etc/apache2/sites-available:delegated
       - ${LOG_DIR-./logs/apache2}:/etc/apache2/logs/apache2:delegated
@@ -60,33 +59,33 @@ services:
   #      - '8080:80'
   #    volumes:
   #      - /sessions
-  rabbit:
-    networks:
-      - lamp-network
-    hostname: "${STACK_NAME}-rb"
-    container_name: "${STACK_NAME}-rb"
-    domainname: "${STACK_NAME}-rb"
-    image: "rabbitmq:3-management"
-    ports:
-      - "15672:15672"
-      - "5672:5672"
-    environment:
-      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
-      RABBITMQ_DEFAULT_USER: "rabbitmq"
-      RABBITMQ_DEFAULT_PASS: "rabbitmq"
-      RABBITMQ_DEFAULT_VHOST: "/"
-  redis:
-    container_name: "${STACK_NAME}-rds"
-    domainname: "${STACK_NAME}-rds"
-    hostname: "${STACK_NAME}-rds"
-    image: redis:latest
-    # command: redis-server --appendonly yes --requirepass root
-    command: ["redis-server", "--appendonly", "yes"]
-    ports:
-      - "${HOST_MACHINE_REDIS_PORT}:6379"
-    networks:
-      - lamp-network
-    env_file: .env
+#  rabbit:
+#    networks:
+#      - lamp-network
+#    hostname: "${STACK_NAME}-rb"
+#    container_name: "${STACK_NAME}-rb"
+#    domainname: "${STACK_NAME}-rb"
+#    image: "rabbitmq:3-management"
+#    ports:
+#      - "15672:15672"
+#      - "5672:5672"
+#    environment:
+#      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+#      RABBITMQ_DEFAULT_USER: "rabbitmq"
+#      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+#      RABBITMQ_DEFAULT_VHOST: "/"
+#  redis:
+#    container_name: "${STACK_NAME}-rds"
+#    domainname: "${STACK_NAME}-rds"
+#    hostname: "${STACK_NAME}-rds"
+#    image: redis:latest
+#    # command: redis-server --appendonly yes --requirepass root
+#    command: ["redis-server", "--appendonly", "yes"]
+#    ports:
+#      - "${HOST_MACHINE_REDIS_PORT}:6379"
+#    networks:
+#      - lamp-network
+#    env_file: .env
 networks:
   lamp-network:
 
