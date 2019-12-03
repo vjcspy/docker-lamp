@@ -42,50 +42,33 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     env_file: .env
-  #  phpmyadmin:
-  #    image: phpmyadmin/phpmyadmin
-  #    container_name: 'sc-phpmyadmin'
-  #    links:
-  #      - mysql
-  #    environment:
-  #      PMA_HOST: mysql
-  #      PMA_PORT: 3306
-  #      PMA_USER: ${MYSQL_USER}
-  #      PMA_PASSWORD: ${MYSQL_PASSWORD}
-  #      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-  #      MYSQL_USER: ${MYSQL_USER}
-  #      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-  #    ports:
-  #      - '8080:80'
-  #    volumes:
-  #      - /sessions
-#  rabbit:
-#    networks:
-#      - lamp-network
-#    hostname: "${STACK_NAME}-rb"
-#    container_name: "${STACK_NAME}-rb"
-#    domainname: "${STACK_NAME}-rb"
-#    image: "rabbitmq:3-management"
-#    ports:
-#      - "15672:15672"
-#      - "5672:5672"
-#    environment:
-#      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
-#      RABBITMQ_DEFAULT_USER: "rabbitmq"
-#      RABBITMQ_DEFAULT_PASS: "rabbitmq"
-#      RABBITMQ_DEFAULT_VHOST: "/"
-#  redis:
-#    container_name: "${STACK_NAME}-rds"
-#    domainname: "${STACK_NAME}-rds"
-#    hostname: "${STACK_NAME}-rds"
-#    image: redis:latest
-#    # command: redis-server --appendonly yes --requirepass root
-#    command: ["redis-server", "--appendonly", "yes"]
-#    ports:
-#      - "${HOST_MACHINE_REDIS_PORT}:6379"
-#    networks:
-#      - lamp-network
-#    env_file: .env
+  rabbit:
+    networks:
+      - lamp-network
+    hostname: "${STACK_NAME}-rb"
+    container_name: "${STACK_NAME}-rb"
+    domainname: "${STACK_NAME}-rb"
+    image: "rabbitmq:3-management"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+      RABBITMQ_DEFAULT_VHOST: "/"
+  redis:
+    container_name: "${STACK_NAME}-rds"
+    domainname: "${STACK_NAME}-rds"
+    hostname: "${STACK_NAME}-rds"
+    image: redis:latest
+    # command: redis-server --appendonly yes --requirepass root
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "${HOST_MACHINE_REDIS_PORT}:6379"
+    networks:
+      - lamp-network
+    env_file: .env
 networks:
   lamp-network:
 
