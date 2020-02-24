@@ -1,4 +1,8 @@
-- xdebug
+ # xdebug
 
-Bat buoc phai config trong php.ini de bat xdebug
-bat buoc phai config trong docker-compose de set enviroment, remote_host
+- I already configured everything for xdebug:
+  + php.ini: set autostart  = 0
+  + variable environment: PHP_IDE_CONFIG, XDEBUG_REMOTE_CONNECT_BACK, XDEBUG_REMOTE_HOST
+
+- Now, just turn on/off xdebug extension on chrome
+        
