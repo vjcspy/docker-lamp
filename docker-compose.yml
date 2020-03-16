@@ -14,10 +14,6 @@ services:
       - lamp-network
     volumes:
       - ./www/src/:/var/www:delegated
-      - ./config/key:/var/key:delegated
-      - ./config/nginx/custom-vhost/:/opt/docker/etc/nginx/custom-vhost/
-      - ./config/nginx/conf.d/bom.conf:/opt/docker/etc/nginx/conf.d/bom.conf
-      - ./config/nginx/conf.d/ticket.conf:/opt/docker/etc/nginx/conf.d/ticket.conf
       - ${PHP_INI-./config/php/php.ini}:/opt/docker/etc/php/php.ini
     env_file: .env
     environment:
