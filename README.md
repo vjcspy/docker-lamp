@@ -1,4 +1,7 @@
- # xdebug
+# nginx-php7.3
+------------------------------------
+
+ ## xdebug
 
 - I already configured everything for xdebug:
   + php.ini: set autostart  = 0

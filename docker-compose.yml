@@ -6,18 +6,21 @@ services:
     container_name: "${STACK_NAME}-web"
     domainname: "${STACK_NAME}-web"
     hostname: "${STACK_NAME}-web"
-    #    restart: 'always'
     ports:
       - "80:80"
       - "443:443"
     networks:
       - lamp-network
     volumes:
+      - ./www/html/:/app:delegated
       - ./www/src/:/var/www:delegated
       - ${PHP_INI-./config/php/php.ini}:/opt/docker/etc/php/php.ini
+      - ./config/nginx/vhost.conf:/opt/docker/etc/nginx/vhost.conf
+      - ./config/nginx/conf.d:/opt/docker/etc/nginx/conf.d
+      - ./config/nginx/custom-vhost:/opt/docker/etc/nginx/custom-vhost
     env_file: .env
     environment:
-      PHP_IDE_CONFIG: "serverName=bom"
+      PHP_IDE_CONFIG: "serverName=bom" #debug cli
       XDEBUG_REMOTE_HOST: "host.docker.internal"
       XDEBUG_REMOTE_CONNECT_BACK: 0
       XDEBUG_REMOTE_AUTOSTART: 0
@@ -26,7 +29,6 @@ services:
     container_name: "${STACK_NAME}-db"
     domainname: "${STACK_NAME}-db"
     hostname: "${STACK_NAME}-db"
-    #    restart: 'always'
     ports:
       - "${HOST_MACHINE_MYSQL_PORT}:3306"
     networks:
