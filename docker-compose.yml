@@ -2,7 +2,7 @@ version: "3.5"
 
 services:
   webserver:
-    image: vjcspy/devops-php:latest
+    build: ./bin/webserver
     container_name: "${STACK_NAME}-web"
     domainname: "${STACK_NAME}-web"
     hostname: "${STACK_NAME}-web"
