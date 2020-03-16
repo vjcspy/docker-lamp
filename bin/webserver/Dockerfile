@@ -40,4 +40,8 @@ RUN apt-get -y install iproute2
 # Ports: apache2, xdebug
 EXPOSE 80 9000 22 443
 
+# Init
+ADD ./utils/init.sh /init.sh
+RUN chmod 755 /*.sh
+
 # ENTRYPOINT ["/init.sh"]

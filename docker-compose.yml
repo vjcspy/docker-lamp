@@ -15,19 +15,16 @@ services:
     volumes:
       - ./www/src/:/var/www:delegated
       - ./config/key:/var/key:delegated
-      - ./config/nginx/custom-vhost/bom.conf:/opt/docker/etc/nginx/custom-vhost/bom.conf
+      - ./config/nginx/custom-vhost/:/opt/docker/etc/nginx/custom-vhost/
       - ./config/nginx/conf.d/bom.conf:/opt/docker/etc/nginx/conf.d/bom.conf
+      - ./config/nginx/conf.d/ticket.conf:/opt/docker/etc/nginx/conf.d/ticket.conf
       - ${PHP_INI-./config/php/php.ini}:/opt/docker/etc/php/php.ini
-      # - ${VHOSTS_DIR-./config/vhosts}:/etc/apache2/sites-available:delegated
-      # - ${LOG_DIR-./logs/apache2}:/etc/apache2/logs/apache2:delegated
-      # - ./config/apache/apache2.conf:/etc/apache2/apache2.conf:delegated
-      # - ./config/apache/ports.conf:/etc/apache2/ports.conf:delegated
-      # - ./config/apache/envvars:/etc/apache2/envvars:delegated
     env_file: .env
     environment:
       PHP_IDE_CONFIG: "serverName=bom"
-      XDEBUG_REMOTE_HOST: "172.24.0.1"
+      XDEBUG_REMOTE_HOST: "host.docker.internal"
       XDEBUG_REMOTE_CONNECT_BACK: 0
+      XDEBUG_REMOTE_AUTOSTART: 0
   mysql:
     build: ./bin/mysql
     container_name: "${STACK_NAME}-db"
